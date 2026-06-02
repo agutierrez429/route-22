@@ -13,7 +13,7 @@ export default function IntroPage(){
             </p>
 
             <Link
-                href= "/stops"
+                href= "/stops/1"
                 className="bg-white text-black px-6 py-3 rounded-full font-medium hover:opacity-80 transition"
             >
                 Begin Route

@@ -1,4 +1,6 @@
-export const stops = [
+import { Stop } from "@/types";
+
+export const stops: Stop[] = [
     {
         id: "1",
         senderName: "Friend 1",
@@ -14,5 +16,13 @@ export const stops = [
         caption: "Another little stop along the way.",
         videoUrl: "/videos/friend-2.mp4",
         orderIndex: 2,
-    }
+    },
+    {
+        id: "3",
+        senderName: "Friend 3",
+        title: "Final Friend Stop",
+        caption: "One more message before the final stop.",
+        videoUrl: "/videos/friend-2.mp4",
+        orderIndex: 3,
+    },
 ];
