@@ -6,7 +6,7 @@ type StopCardProps = {
 
 export default function StopCard({ stop }: StopCardProps) {
     return ( 
-        <article className ="rounded-2xl border border-neutral-800 bg-beutral-900 p-6">
+        <article className ="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
             <p className ="mb-2 text-sm uppercase tracking-[0.25em] text-neutral-500">
                 Stop {stop.orderIndex}
             </p>

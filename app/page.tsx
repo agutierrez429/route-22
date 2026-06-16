@@ -5,7 +5,7 @@ export default function HomePage(){
     <main className="min-h-screen flex flex-col items-center justify-center bg-neutral-950 text-white px-6">
         <h1 className = "text-5xl font-bold mb-4">Route 22</h1>
 
-        <p className = "text-neautral-480 text-center max-w-md mb-8">
+        <p className = "text-neutral-400 text-center max-w-md mb-8">
           A little birthday detour made just for you.
         </p>
 

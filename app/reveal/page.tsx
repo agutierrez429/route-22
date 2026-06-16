@@ -9,7 +9,7 @@ export default function RevealPage(){
             </p>
 
             <h1 className = "mb-6 text-5xl font-bold">
-                We're going on a roadtrip.
+                We&apos;re going on a roadtrip.
             </h1>
 
             <p className = "mb-10 max-w-2xl text-lg text-neutral-400">

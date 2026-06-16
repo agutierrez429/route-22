@@ -12,7 +12,8 @@ export default function FinalStopPage() {
                 </h1>
 
                 <p className = "mb-8 text-neutral-400">
-                    There's one more message before the road continues.                </p>
+                    There&apos;s one more message before the road continues.
+                </p>
 
                 <video
                     src="/videos/final-message.mp4"
@@ -23,11 +24,11 @@ export default function FinalStopPage() {
 
                 <div className="rounded-3xl border border-neutral-800 bg-neutral-950 p-6">
                     <p className="mb-4 text-neutral-300">
-                        This started as a birthday surprise, but there's one more part I wanted to give you.
+                        This started as a birthday surprise, but there&apos;s one more part I wanted to give you.
                     </p>
 
                     <p className="text-neutral-400">
-                        When you're ready, open the next part of Route 22.
+                        When you&apos;re ready, open the next part of Route 22.
                     </p>
                 </div>
 
