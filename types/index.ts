@@ -8,11 +8,11 @@ export type Stop = {
 };
 
 export type Memory = {
-    id: string;
-    title: string;
-    caption: string;
-    mediaUrl: string;
-    mediaType: "image" | "video";
-    location: string;
-    memoryDate: string;
+  id: string;
+  title: string;
+  caption: string;
+  media_url: string;
+  media_type: "image" | "video";
+  location: string;
+  memory_date: string;
 };

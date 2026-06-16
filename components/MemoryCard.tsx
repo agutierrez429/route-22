@@ -7,15 +7,15 @@ type MemoryCardProps = {
 export default function MemoryCard({ memory }: MemoryCardProps) {
     return (
         <article className="overflow-hidden rounded-3xl border border-neutral-800 bg-neutral-900">
-            {memory.mediaType === "image" ? (
+            {memory.media_type === "image" ? (
                 <img
-                    src={memory.mediaUrl}
+                    src={memory.media_url}
                     alt={memory.title}
                     className="aspect-[4/3] w-full object-cover"
                 />
             ) : (
                 <video
-                    src={memory.mediaUrl}
+                    src={memory.media_url}
                     controls
                     preload="metadata"
                     className="aspect-[4/3] w-full object-cover"
@@ -24,7 +24,7 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
 
             <div className="p-5">
                 <p className="mb-2 text-sm text-neutral-500">
-                    {memory.memoryDate} · {memory.location} 
+                    {memory.memory_date} · {memory.location} 
                 </p>
 
                 <h2 className="text-xl font-semibold">{memory.title}</h2>
