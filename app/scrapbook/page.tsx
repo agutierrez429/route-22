@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import MemoryCard from "@/components/MemoryCard";
 import { supabase } from "@/lib/supabase";
 
