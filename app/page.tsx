@@ -13,12 +13,11 @@ export default function HomePage() {
         </p>
 
         <h1 className="mb-6 text-5xl font-black sm:text-7xl">
-          Happy Birthday
+          Happy Birthday, My Love
         </h1>
 
         <p className="mb-8 text-lg text-slate-600">
-          Before today ends, there are a few people who would like to say
-          something.
+          Before today ends, there are a few messages
         </p>
 
         <Link

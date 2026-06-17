@@ -1,15 +1,71 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
+
+const confettiPieces = [
+  ["2%", "#38bdf8", "0s", "5.4s", "18vw", "620deg", "8px", "14px"],
+  ["6%", "#f97316", "0.9s", "6.2s", "12vw", "480deg", "7px", "12px"],
+  ["10%", "#ec4899", "1.7s", "5.8s", "22vw", "720deg", "10px", "10px"],
+  ["15%", "#facc15", "0.3s", "6.5s", "16vw", "540deg", "6px", "16px"],
+  ["19%", "#22c55e", "2.1s", "5.7s", "10vw", "680deg", "9px", "13px"],
+  ["24%", "#a855f7", "1.1s", "6.1s", "20vw", "520deg", "7px", "15px"],
+  ["28%", "#fb7185", "0.5s", "5.5s", "14vw", "760deg", "9px", "9px"],
+  ["33%", "#0ea5e9", "1.9s", "6.4s", "18vw", "600deg", "6px", "14px"],
+  ["38%", "#f59e0b", "0.2s", "5.9s", "11vw", "500deg", "8px", "12px"],
+  ["42%", "#14b8a6", "2.4s", "6.6s", "19vw", "720deg", "10px", "11px"],
+  ["47%", "#e879f9", "1.3s", "5.6s", "15vw", "560deg", "7px", "16px"],
+  ["52%", "#fb923c", "0.7s", "6.3s", "21vw", "660deg", "9px", "12px"],
+  ["57%", "#60a5fa", "1.6s", "5.8s", "13vw", "520deg", "8px", "14px"],
+  ["61%", "#f43f5e", "0.1s", "6s", "17vw", "700deg", "7px", "13px"],
+  ["66%", "#84cc16", "2s", "6.7s", "12vw", "500deg", "9px", "9px"],
+  ["70%", "#c084fc", "1s", "5.6s", "20vw", "640deg", "6px", "16px"],
+  ["75%", "#22d3ee", "0.4s", "6.2s", "14vw", "580deg", "8px", "13px"],
+  ["79%", "#fbbf24", "2.2s", "5.9s", "18vw", "760deg", "10px", "10px"],
+  ["84%", "#f472b6", "1.5s", "6.5s", "11vw", "540deg", "7px", "14px"],
+  ["89%", "#4ade80", "0.8s", "5.7s", "16vw", "680deg", "9px", "12px"],
+  ["94%", "#38bdf8", "1.8s", "6.1s", "13vw", "620deg", "8px", "15px"],
+  ["98%", "#fb7185", "0.6s", "5.5s", "9vw", "480deg", "7px", "12px"],
+];
+
+function ConfettiBurst() {
+  return (
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+      {confettiPieces.map(
+        ([left, color, delay, duration, drift, spin, width, height], index) => (
+          <span
+            key={`${left}-${delay}`}
+            className="confetti-piece"
+            data-shape={index % 3 === 0 ? "circle" : "rectangle"}
+            style={
+              {
+                "--confetti-left": left,
+                "--confetti-drift": drift,
+                "--confetti-spin": spin,
+                "--confetti-duration": duration,
+                "--confetti-delay": delay,
+                "--confetti-width": width,
+                "--confetti-height": height,
+                backgroundColor: color,
+              } as CSSProperties
+            }
+          />
+        )
+      )}
+    </div>
+  );
+}
 
 export default function RevealPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-sky-200 via-yellow-100 to-pink-200 px-6 py-10 text-slate-900">
-      <section className="mx-auto max-w-4xl">
+    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-200 via-yellow-100 to-pink-200 px-6 py-10 text-slate-900">
+      <ConfettiBurst />
+
+      <section className="relative z-10 mx-auto max-w-4xl">
         <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-sky-600">
           Route 22 Continues
         </p>
 
         <h1 className="mb-6 text-5xl font-black sm:text-6xl">
-          We’re going on a roadtrip.
+          We&apos;re going on a roadtrip.
         </h1>
 
         <p className="mb-10 max-w-2xl text-lg text-slate-600">
@@ -24,7 +80,7 @@ export default function RevealPage() {
 
           <div className="flex flex-col gap-4 text-3xl font-black sm:flex-row sm:items-center sm:justify-between">
             <span>Montclair, CA</span>
-            <span className="text-pink-500">→</span>
+            <span className="text-pink-500">&rarr;</span>
             <span>Seattle, WA</span>
           </div>
 

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import AdaptiveStopCard from "@/components/AdaptiveStopCard";
+import RouteProgress from "@/components/RouteProgress";
 import { stops } from "@/lib/data";
 
 export default async function StopPage({
@@ -18,53 +20,14 @@ export default async function StopPage({
   const previousStop = stops[currentIndex - 1];
   const nextStop = stops[currentIndex + 1];
 
-  const progressPercent = Math.round(
-    ((currentIndex + 1) / stops.length) * 100
-  );
-
   return (
     <main className="min-h-screen bg-gradient-to-br from-sky-100 via-white to-pink-100 px-6 py-10 text-slate-900">
       <section className="mx-auto max-w-2xl">
-        <div className="mb-8 rounded-3xl border border-white/70 bg-white/75 p-5 shadow-xl backdrop-blur-md">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-sky-500">
-            Route 22
-          </p>
-
-          <div className="mb-3 flex items-center justify-between text-sm font-semibold text-slate-600">
-            <span>
-              Stop {currentIndex + 1} of {stops.length}
-            </span>
-            <span>{progressPercent}% complete</span>
-          </div>
-
-          <div className="h-3 overflow-hidden rounded-full bg-slate-200">
-            <div
-              className="h-full rounded-full bg-gradient-to-r from-pink-500 via-orange-400 to-sky-500 transition-all"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
+        <div className="mb-8">
+          <RouteProgress currentIndex={currentIndex} totalStops={stops.length} />
         </div>
 
-        <article className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
-          <p className="mb-2 text-sm font-bold uppercase tracking-[0.25em] text-pink-500">
-            Stop {stop.orderIndex}
-          </p>
-
-          <h1 className="mb-4 text-4xl font-black">{stop.title}</h1>
-
-          <p className="mb-6 font-semibold text-slate-500">
-            From: {stop.senderName}
-          </p>
-
-          <video
-            src={stop.videoUrl}
-            controls
-            preload="metadata"
-            className="mb-6 aspect-video w-full rounded-2xl bg-slate-200 shadow-lg"
-          />
-
-          <p className="text-lg text-slate-700">{stop.caption}</p>
-        </article>
+        <AdaptiveStopCard stop={stop} />
 
         <div className="mt-8 flex items-center justify-between gap-4">
           {previousStop ? (
