@@ -1,41 +1,43 @@
 import Link from "next/link";
+import AdaptiveVideo from "@/components/AdaptiveVideo";
 
 export default function FinalStopPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-orange-100 px-6 py-10 text-slate-900">
+    <main className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-orange-100 px-4 py-4 text-slate-900 sm:px-6 sm:py-6">
       <section className="mx-auto max-w-2xl">
-        <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-purple-500">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-purple-500 sm:text-sm sm:tracking-[0.35em]">
           Route 22
         </p>
 
-        <h1 className="mb-4 text-5xl font-black">Final Stop</h1>
+        <h1 className="mb-3 text-3xl font-black leading-tight sm:text-4xl">
+          Final Stop
+        </h1>
 
-        <p className="mb-8 text-lg text-slate-600">
-          There’s one more message before the road continues.
+        <p className="mb-6 text-base text-slate-600">
+          There&apos;s one more message before the road continues.
         </p>
 
-        <video
+        <AdaptiveVideo
           src="/videos/final-message.mp4"
-          controls
-          preload="metadata"
-          className="mb-8 aspect-video w-full rounded-[2rem] bg-white shadow-2xl"
+          frameClassName="mb-6 bg-white"
+          className="bg-white"
         />
 
-        <div className="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-xl backdrop-blur-md">
-          <p className="mb-4 text-lg text-slate-700">
-            This started as a birthday surprise, but there’s one more part I
+        <div className="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-xl backdrop-blur-md sm:p-5">
+          <p className="mb-3 text-base text-slate-700">
+            This started as a birthday surprise, but there&apos;s one more part I
             wanted to give you.
           </p>
 
-          <p className="text-slate-500">
-            When you’re ready, open the next part of Route 22.
+          <p className="text-sm text-slate-500">
+            When you&apos;re ready, open the next part of Route 22.
           </p>
         </div>
 
-        <div className="mt-8 flex justify-end">
+        <div className="mt-4 flex justify-stretch sm:justify-end">
           <Link
             href="/reveal"
-            className="rounded-full bg-purple-500 px-8 py-4 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-purple-600"
+            className="inline-flex w-full justify-center rounded-full bg-purple-500 px-8 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-purple-600 sm:w-auto"
           >
             Reveal Route 22
           </Link>

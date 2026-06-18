@@ -1,4 +1,5 @@
 import type { Stop } from "@/types";
+import AdaptiveVideo from "@/components/AdaptiveVideo";
 
 type StopCardProps = {
     stop: Stop;
@@ -15,11 +16,10 @@ export default function StopCard({ stop }: StopCardProps) {
 
             <p className = "mb-4 text-neutral-400">From: {stop.senderName}</p>
 
-            <video
+            <AdaptiveVideo
                 src={stop.videoUrl}
-                controls
-                preload="metadata"
-                className = "mb-4 aspect-video w-full rounded-xl bg-neutral-800"
+                frameClassName="mb-4 bg-neutral-800"
+                className="bg-neutral-900"
             />
 
             <p className = "text-neutral-300">{stop.caption}</p>

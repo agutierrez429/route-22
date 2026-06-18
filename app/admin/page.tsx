@@ -67,9 +67,9 @@ export default function AdminPage() {
 
   if (!isUnlocked) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-200 via-orange-100 to-sky-200 px-6 text-slate-900">
-        <section className="w-full max-w-sm rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-pink-500">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-200 via-orange-100 to-sky-200 px-4 py-8 text-slate-900 sm:px-6">
+        <section className="w-full max-w-sm rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-2xl backdrop-blur-md sm:p-6">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-pink-500 sm:text-sm sm:tracking-[0.35em]">
             Route Manager
           </p>
 
@@ -111,13 +111,15 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-sky-100 px-6 py-10 text-slate-900">
-      <section className="mx-auto max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
-        <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-orange-500">
+    <main className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-sky-100 px-4 py-8 text-slate-900 sm:px-6 sm:py-10">
+      <section className="mx-auto max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-2xl backdrop-blur-md sm:p-6">
+        <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-orange-500 sm:text-sm sm:tracking-[0.35em]">
           Route Manager
         </p>
 
-        <h1 className="mb-6 text-5xl font-black">Add Memory</h1>
+        <h1 className="mb-6 text-4xl font-black leading-tight sm:text-5xl">
+          Add Memory
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <input
@@ -160,7 +162,7 @@ export default function AdminPage() {
 
           <button
             type="submit"
-            className="rounded-full bg-orange-500 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600"
+            className="w-full rounded-full bg-orange-500 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600 sm:w-auto"
           >
             Upload Memory
           </button>

@@ -56,40 +56,40 @@ function ConfettiBurst() {
 
 export default function RevealPage() {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-200 via-yellow-100 to-pink-200 px-6 py-10 text-slate-900">
+    <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-sky-200 via-yellow-100 to-pink-200 px-4 py-4 text-slate-900 sm:px-6 sm:py-6">
       <ConfettiBurst />
 
       <section className="relative z-10 mx-auto max-w-4xl">
-        <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-sky-600">
+        <p className="mb-2 text-xs font-bold uppercase tracking-[0.28em] text-sky-600 sm:text-sm sm:tracking-[0.35em]">
           Route 22 Continues
         </p>
 
-        <h1 className="mb-6 text-5xl font-black sm:text-6xl">
+        <h1 className="mb-4 text-3xl font-black leading-none sm:text-5xl">
           We&apos;re going on a roadtrip.
         </h1>
 
-        <p className="mb-10 max-w-2xl text-lg text-slate-600">
+        <p className="mb-8 max-w-2xl text-base text-slate-600">
           This birthday surprise does not end here. The next part is something
           we get to experience together.
         </p>
 
-        <div className="mb-10 rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
-          <p className="mb-4 text-sm font-bold uppercase tracking-[0.25em] text-orange-500">
+        <div className="mb-8 rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-2xl backdrop-blur-md sm:p-5">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-orange-500">
             The Route
           </p>
 
-          <div className="flex flex-col gap-4 text-3xl font-black sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-2 text-xl font-black leading-tight sm:flex-row sm:items-center sm:justify-between sm:text-2xl">
             <span>Montclair, CA</span>
             <span className="text-pink-500">&rarr;</span>
             <span>Seattle, WA</span>
           </div>
 
-          <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200">
+          <div className="mt-5 h-3 overflow-hidden rounded-full bg-slate-200">
             <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-pink-500 via-orange-400 to-sky-500" />
           </div>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-3">
           {[
             {
               label: "Plan",
@@ -109,21 +109,21 @@ export default function RevealPage() {
           ].map((card) => (
             <div
               key={card.title}
-              className="rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-xl backdrop-blur-md transition hover:-translate-y-1"
+              className="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-xl backdrop-blur-md transition hover:-translate-y-1"
             >
-              <p className="mb-2 text-sm font-bold text-pink-500">
+              <p className="mb-2 text-xs font-bold text-pink-500">
                 {card.label}
               </p>
-              <h2 className="text-xl font-black">{card.title}</h2>
-              <p className="mt-2 text-sm text-slate-600">{card.text}</p>
+              <h2 className="text-lg font-black">{card.title}</h2>
+              <p className="mt-2 text-xs text-slate-600">{card.text}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 flex justify-end">
+        <div className="mt-10 flex justify-stretch sm:justify-end">
           <Link
             href="/scrapbook"
-            className="rounded-full bg-sky-500 px-8 py-4 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-sky-600"
+            className="inline-flex w-full justify-center rounded-full bg-sky-500 px-8 py-4 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-sky-600 sm:w-auto"
           >
             Open Scrapbook
           </Link>

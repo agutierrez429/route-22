@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, type SyntheticEvent } from "react";
+import { useState } from "react";
+import AdaptiveVideo, { type VideoOrientation } from "@/components/AdaptiveVideo";
 import type { Stop } from "@/types";
-
-type VideoOrientation = "unknown" | "portrait" | "landscape" | "square";
 
 type AdaptiveStopCardProps = {
   stop: Stop;
@@ -12,60 +11,40 @@ type AdaptiveStopCardProps = {
 export default function AdaptiveStopCard({ stop }: AdaptiveStopCardProps) {
   const [orientation, setOrientation] = useState<VideoOrientation>("unknown");
 
-  function handleLoadedMetadata(event: SyntheticEvent<HTMLVideoElement>) {
-    const { videoHeight, videoWidth } = event.currentTarget;
-
-    if (!videoHeight || !videoWidth) {
-      return;
-    }
-
-    if (videoHeight > videoWidth) {
-      setOrientation("portrait");
-    } else if (videoWidth > videoHeight) {
-      setOrientation("landscape");
-    } else {
-      setOrientation("square");
-    }
-  }
-
   const cardWidthClass =
-    orientation === "landscape"
-      ? "max-w-2xl"
+    orientation === "unknown"
+      ? "max-w-3xl"
+      : orientation === "landscape"
+      ? "max-w-5xl"
       : orientation === "square"
-      ? "max-w-xl"
-      : "max-w-md";
-
-  const videoSizeClass =
-    orientation === "landscape"
-      ? "w-full"
-      : "max-h-[72vh] w-auto max-w-full";
+      ? "max-w-2xl"
+      : "max-w-lg";
 
   return (
     <article
-      className={`mx-auto overflow-hidden rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md transition-[max-width] duration-300 ${cardWidthClass}`}
+      className={`mx-auto w-full overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 p-2 shadow-2xl backdrop-blur-md transition-[max-width] duration-300 sm:p-3 ${cardWidthClass}`}
     >
-      <p className="mb-2 text-sm font-bold uppercase tracking-[0.25em] text-pink-500">
-        Stop {stop.orderIndex}
-      </p>
+      <AdaptiveVideo
+        src={stop.videoUrl}
+        frameClassName="bg-white/70 shadow-2xl"
+        onOrientationChange={setOrientation}
+      />
 
-      <h1 className="mb-4 text-4xl font-black">{stop.title}</h1>
+      <div className="p-2 sm:p-3">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-pink-500 sm:text-sm">
+            Stop {stop.orderIndex}
+          </p>
 
-      <p className="mb-6 font-semibold text-slate-500">
-        From: {stop.senderName}
-      </p>
+          <p className="text-sm font-semibold text-slate-500">From: {stop.senderName}</p>
+        </div>
 
-      <div className="mb-6 flex justify-center rounded-2xl bg-slate-100 p-2 shadow-lg">
-        <video
-          src={stop.videoUrl}
-          controls
-          playsInline
-          preload="metadata"
-          onLoadedMetadata={handleLoadedMetadata}
-          className={`${videoSizeClass} rounded-xl bg-slate-200`}
-        />
+        <h1 className="text-2xl font-black leading-tight sm:text-3xl">
+          {stop.title}
+        </h1>
+
+        <p className="mt-2 text-base text-slate-700">{stop.caption}</p>
       </div>
-
-      <p className="text-lg text-slate-700">{stop.caption}</p>
     </article>
   );
 }
