@@ -1,10 +1,11 @@
 export type Stop = {
   id: string;
-  senderName: string;
+  sender_name: string;
   title: string;
-  caption: string;
-  videoUrl: string;
-  orderIndex: number;
+  caption: string | null;
+  video_url: string;
+  order_index: number;
+  created_at?: string;
 };
 
 export type Memory = {

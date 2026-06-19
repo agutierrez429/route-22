@@ -25,7 +25,7 @@ export default function AdaptiveStopCard({ stop }: AdaptiveStopCardProps) {
       className={`mx-auto w-full overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 p-2 shadow-2xl backdrop-blur-md transition-[max-width] duration-300 sm:p-3 ${cardWidthClass}`}
     >
       <AdaptiveVideo
-        src={stop.videoUrl}
+        src={stop.video_url}
         frameClassName="bg-white/70 shadow-2xl"
         onOrientationChange={setOrientation}
       />
@@ -33,10 +33,10 @@ export default function AdaptiveStopCard({ stop }: AdaptiveStopCardProps) {
       <div className="p-2 sm:p-3">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs font-bold uppercase tracking-[0.24em] text-pink-500 sm:text-sm">
-            Stop {stop.orderIndex}
+            Stop {stop.order_index}
           </p>
 
-          <p className="text-sm font-semibold text-slate-500">From: {stop.senderName}</p>
+          <p className="text-sm font-semibold text-slate-500">From: {stop.sender_name}</p>
         </div>
 
         <h1 className="text-2xl font-black leading-tight sm:text-3xl">

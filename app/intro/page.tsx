@@ -16,12 +16,12 @@ export default function IntroPage() {
           Take your time with each stop
         </p>
 
-        <Link
-          href="/stops/1"
-          className="inline-flex w-full justify-center rounded-full bg-orange-500 px-8 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600 sm:w-auto"
-        >
-          Start Stop 1
-        </Link>
+      <Link
+        href="/stops"
+        className="inline-flex rounded-full bg-orange-500 px-8 py-4 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600"
+      >
+        Start Stop 1
+      </Link>
       </section>
     </main>
   );

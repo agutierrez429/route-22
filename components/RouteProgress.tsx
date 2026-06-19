@@ -39,7 +39,7 @@ export default function RouteProgress({
         />
       </div>
 
-      <div className="mt-3 overflow-x-auto px-1 py-1">
+      <div className="mt-2 overflow-x-auto px-1 py-2">
         <div
           aria-label={`Route is ${progressPercent}% complete`}
           aria-valuemax={100}
@@ -53,7 +53,7 @@ export default function RouteProgress({
             className={`${routeIconClass} bg-green-400 text-white`}
             title="Home"
           >
-            <span aria-hidden="true">🏠</span>
+            <span aria-hidden="true">{"\u{1F3E0}"}</span>
           </div>
 
           {points.map((point, index) => {
@@ -85,7 +85,7 @@ export default function RouteProgress({
                   title={`Stop ${index + 1}`}
                 >
                   <span aria-hidden="true">
-                    {isCurrent ? "🚘" : "📍"}
+                    {isCurrent ? "\u{1F697}" : "\u{1F4CD}"}
                   </span>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function RouteProgress({
             className={`${routeIconClass} bg-yellow-300 text-slate-900`}
             title="Final reveal"
           >
-            <span aria-hidden="true">🎁</span>
+            <span aria-hidden="true">{"\u{1F381}"}</span>
           </div>
         </div>
       </div>

@@ -4,34 +4,37 @@ import { useState } from "react";
 import AdminNav from "@/components/AdminNav";
 import { supabase } from "@/lib/supabase";
 
-export default function AdminPage() {
+export default function StopsAdminPage() {
   const [password, setPassword] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [authError, setAuthError] = useState("");
 
+  const [senderName, setSenderName] = useState("");
   const [title, setTitle] = useState("");
   const [caption, setCaption] = useState("");
-  const [location, setLocation] = useState("");
-  const [memoryDate, setMemoryDate] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!file) {
-      setStatus("Please choose a file.");
+    if (!videoFile) {
+      setStatus("Please choose a video.");
       return;
     }
 
-    setStatus("Uploading...");
+    setStatus("Uploading video...");
 
-    const fileExt = file.name.split(".").pop();
-    const filePath = `${Date.now()}.${fileExt}`;
+    const fileExt = videoFile.name.split(".").pop();
+    const safeName = videoFile.name
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zA-Z0-9.-]/g, "");
+
+    const filePath = `friend-videos/${Date.now()}-${safeName}.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from("route-22-media")
-      .upload(filePath, file);
+      .upload(filePath, videoFile);
 
     if (uploadError) {
       setStatus(uploadError.message);
@@ -42,15 +45,23 @@ export default function AdminPage() {
       .from("route-22-media")
       .getPublicUrl(filePath);
 
-    const mediaType = file.type.startsWith("video") ? "video" : "image";
+    const { data: latestStop } = await supabase
+      .from("stops")
+      .select("order_index")
+      .order("order_index", { ascending: false })
+      .limit(1);
 
-    const { error: insertError } = await supabase.from("memories").insert({
+    const nextOrderIndex =
+      latestStop && latestStop.length > 0
+        ? latestStop[0].order_index + 1
+        : 1;
+
+    const { error: insertError } = await supabase.from("stops").insert({
+      sender_name: senderName,
       title,
       caption,
-      location,
-      memory_date: memoryDate,
-      media_url: data.publicUrl,
-      media_type: mediaType,
+      video_url: data.publicUrl,
+      order_index: nextOrderIndex,
     });
 
     if (insertError) {
@@ -58,23 +69,22 @@ export default function AdminPage() {
       return;
     }
 
-    setStatus("Memory uploaded successfully!");
+    setStatus("Stop added successfully!");
+    setSenderName("");
     setTitle("");
     setCaption("");
-    setLocation("");
-    setMemoryDate("");
-    setFile(null);
+    setVideoFile(null);
   }
 
   if (!isUnlocked) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-200 via-orange-100 to-sky-200 px-4 py-8 text-slate-900 sm:px-6">
-        <section className="w-full max-w-sm rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-2xl backdrop-blur-md sm:p-6">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-pink-500 sm:text-sm sm:tracking-[0.35em]">
+      <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-200 via-orange-100 to-sky-200 px-6 text-slate-900">
+        <section className="w-full max-w-sm rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
+          <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-pink-500">
             Route Manager
           </p>
 
-          <h1 className="mb-6 text-3xl font-black">Admin Access</h1>
+          <h1 className="mb-6 text-3xl font-black">Add Friend Stop</h1>
 
           <form
             onSubmit={(event) => {
@@ -112,27 +122,31 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-sky-100 px-4 py-8 text-slate-900 sm:px-6 sm:py-10">
-      <section className="mx-auto max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-5 shadow-2xl backdrop-blur-md sm:p-6">
-        <p className="mb-3 text-xs font-bold uppercase tracking-[0.28em] text-orange-500 sm:text-sm sm:tracking-[0.35em]">
+    <main className="min-h-screen bg-gradient-to-br from-yellow-100 via-pink-100 to-sky-100 px-6 py-10 text-slate-900">
+      <section className="mx-auto max-w-2xl rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-2xl backdrop-blur-md">
+        <p className="mb-3 text-sm font-bold uppercase tracking-[0.35em] text-orange-500">
           Route Manager
         </p>
 
         <h1 className="mb-6 text-4xl font-black leading-tight sm:text-5xl">
-          Admin
+          Add Friend Stop
         </h1>
 
-        <AdminNav current="memory" />
+        <AdminNav current="stops" />
 
-        <h2 className="mb-4 mt-8 text-2xl font-black leading-tight">
-          Add Memory
-        </h2>
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+          <input
+            value={senderName}
+            onChange={(e) => setSenderName(e.target.value)}
+            placeholder="Friend name"
+            className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
+            required
+          />
 
-        <form onSubmit={handleSubmit} className="space-y-5">
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Memory title"
+            placeholder="Stop title"
             className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
             required
           />
@@ -145,33 +159,18 @@ export default function AdminPage() {
           />
 
           <input
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            placeholder="Location"
-            className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
-          />
-
-          <input
-            type="date"
-            value={memoryDate}
-            onChange={(e) => setMemoryDate(e.target.value)}
-            className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
-            required
-          />
-
-          <input
             type="file"
-            accept="image/*,video/*"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+            accept="video/*"
+            onChange={(e) => setVideoFile(e.target.files?.[0] ?? null)}
             className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
             required
           />
 
           <button
             type="submit"
-            className="w-full rounded-full bg-orange-500 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600 sm:w-auto"
+            className="rounded-full bg-orange-500 px-6 py-3 font-bold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-600"
           >
-            Upload Memory
+            Upload Stop
           </button>
 
           {status && <p className="font-semibold text-slate-600">{status}</p>}

@@ -6,12 +6,12 @@ type MemoryCardProps = {
 
 export default function MemoryCard({ memory }: MemoryCardProps) {
   return (
-    <article className="mb-6 break-inside-avoid overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:shadow-2xl">
+    <article className="mb-6 inline-block w-full break-inside-avoid overflow-hidden rounded-[2rem] border border-white/70 bg-white/85 align-top shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:shadow-2xl">
       {memory.media_type === "image" ? (
         <img
           src={memory.media_url}
           alt={memory.title}
-          className="max-h-[34rem] w-full bg-slate-100 object-contain"
+          className="block h-auto max-h-[34rem] w-full bg-slate-100 object-contain"
         />
       ) : (
         <video
@@ -19,7 +19,7 @@ export default function MemoryCard({ memory }: MemoryCardProps) {
           controls
           playsInline
           preload="metadata"
-          className="max-h-[34rem] w-full bg-slate-100 object-contain"
+          className="block h-auto max-h-[34rem] w-full bg-slate-100 object-contain"
         />
       )}
 
