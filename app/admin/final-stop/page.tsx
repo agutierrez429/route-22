@@ -22,6 +22,7 @@ export default function FinalStopAdminPage() {
   const [bodyText, setBodyText] = useState(defaultFinalStopContent.body_text);
   const [hintText, setHintText] = useState(defaultFinalStopContent.hint_text);
   const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [alsoCreateStop, setAlsoCreateStop] = useState(false);
   const [isLoadingContent, setIsLoadingContent] = useState(false);
   const [status, setStatus] = useState("");
 
@@ -110,6 +111,33 @@ export default function FinalStopAdminPage() {
     if (saveError) {
       setStatus(saveError.message);
       return;
+    }
+
+    // Optionally also create a normal stop entry (mirrors Add Friend Stop behavior)
+    if (alsoCreateStop) {
+      setStatus("Creating a stop entry...");
+
+      const { data: latestStop } = await supabase
+        .from("stops")
+        .select("order_index")
+        .order("order_index", { ascending: false })
+        .limit(1);
+
+      const nextOrderIndex =
+        latestStop && latestStop.length > 0 ? latestStop[0].order_index + 1 : 1;
+
+      const { error: insertError } = await supabase.from("stops").insert({
+        sender_name: "Final",
+        title: "Final Stop",
+        caption: introText || bodyText || "Final message",
+        video_url: nextVideoUrl,
+        order_index: nextOrderIndex,
+      });
+
+      if (insertError) {
+        setStatus(insertError.message);
+        return;
+      }
     }
 
     setVideoFile(null);
@@ -213,6 +241,16 @@ export default function FinalStopAdminPage() {
             className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
             required
           />
+
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={alsoCreateStop}
+              onChange={(e) => setAlsoCreateStop(e.target.checked)}
+              className="h-4 w-4 rounded"
+            />
+            <span className="text-sm">Also create a Friend Stop entry</span>
+          </label>
 
           <button
             type="submit"

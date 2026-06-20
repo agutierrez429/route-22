@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AdaptiveVideo from "@/components/AdaptiveVideo";
+import StopPhotoGallery from "@/components/StopPhotoGallery";
 import {
   FINAL_STOP_CONTENT_ID,
   mergeFinalStopContent,
@@ -56,6 +57,8 @@ export default async function FinalStopPage() {
             {finalStop.hint_text}
           </p>
         </div>
+
+        <StopPhotoGallery stopId="final-stop" />
 
         <div className="mt-4 flex justify-stretch sm:justify-end">
           <Link

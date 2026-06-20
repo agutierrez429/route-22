@@ -7,6 +7,13 @@ import type { Stop } from "@/types";
 
 type StopOption = Pick<Stop, "id" | "sender_name" | "title" | "order_index">;
 
+type StopPhoto = {
+  id: string;
+  stop_id: string;
+  image_url: string;
+  caption: string | null;
+};
+
 export default function StopPhotosAdminPage() {
   const [password, setPassword] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -19,6 +26,30 @@ export default function StopPhotosAdminPage() {
   const [files, setFiles] = useState<FileList | null>(null);
   const [caption, setCaption] = useState("");
   const [status, setStatus] = useState("");
+  const [stopPhotos, setStopPhotos] = useState<StopPhoto[]>([]);
+  const [isLoadingPhotos, setIsLoadingPhotos] = useState(false);
+  const [photoLoadError, setPhotoLoadError] = useState("");
+  const [deletingPhotoId, setDeletingPhotoId] = useState<string | null>(null);
+
+  async function loadPhotos(selectedStopId: string) {
+    setIsLoadingPhotos(true);
+    setPhotoLoadError("");
+
+    const { data, error } = await supabase
+      .from("stop_photos")
+      .select("id, stop_id, image_url, caption")
+      .eq("stop_id", selectedStopId)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      setStopPhotos([]);
+      setPhotoLoadError(error.message);
+    } else {
+      setStopPhotos((data ?? []) as StopPhoto[]);
+    }
+
+    setIsLoadingPhotos(false);
+  }
 
   useEffect(() => {
     if (!isUnlocked) {
@@ -56,6 +87,17 @@ export default function StopPhotosAdminPage() {
 
     loadStops();
   }, [isUnlocked]);
+
+  useEffect(() => {
+    if (!isUnlocked || !stopId) {
+      setStopPhotos([]);
+      setPhotoLoadError("");
+      setIsLoadingPhotos(false);
+      return;
+    }
+
+    loadPhotos(stopId);
+  }, [isUnlocked, stopId]);
 
   async function handleUpload(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -108,6 +150,44 @@ export default function StopPhotosAdminPage() {
     setStatus("Photos uploaded successfully!");
     setFiles(null);
     setCaption("");
+    await loadPhotos(stopId);
+  }
+
+  async function handleDeletePhoto(photoId: string, imageUrl: string) {
+    setDeletingPhotoId(photoId);
+    setStatus("Deleting photo...");
+
+    try {
+      const parsedUrl = new URL(imageUrl);
+      const bucketPath = parsedUrl.pathname.split("/storage/v1/object/public/route-22-media/")[1];
+
+      if (bucketPath) {
+        const { error: deleteError } = await supabase.storage
+          .from("route-22-media")
+          .remove([bucketPath]);
+
+        if (deleteError) {
+          throw deleteError;
+        }
+      }
+    } catch (error) {
+      console.warn("Unable to remove storage file for photo:", error);
+    }
+
+    const { error } = await supabase
+      .from("stop_photos")
+      .delete()
+      .eq("id", photoId);
+
+    if (error) {
+      setStatus(error.message);
+      setDeletingPhotoId(null);
+      return;
+    }
+
+    await loadPhotos(stopId);
+    setStatus("Photo deleted successfully.");
+    setDeletingPhotoId(null);
   }
 
   if (!isUnlocked) {
@@ -169,12 +249,16 @@ export default function StopPhotosAdminPage() {
         <AdminNav current="photos" />
 
         <form onSubmit={handleUpload} className="mt-6 space-y-5">
+          
           <select
+            aria-label="Select stop for photo upload"
             value={stopId}
             onChange={(e) => setStopId(e.target.value)}
             disabled={isLoadingStops || availableStops.length === 0}
             className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
           >
+            <option value="final-stop">Final Stop: Your Message</option>
+
             {availableStops.length === 0 && (
               <option value="">
                 {isLoadingStops ? "Loading stops..." : "No stops found"}
@@ -211,6 +295,7 @@ export default function StopPhotosAdminPage() {
             type="file"
             accept="image/*"
             multiple
+            aria-label="Choose stop photos to upload"
             onChange={(e) => setFiles(e.target.files)}
             className="w-full rounded-xl border border-pink-200 bg-white px-4 py-3"
             required
@@ -226,6 +311,64 @@ export default function StopPhotosAdminPage() {
 
           {status && <p className="font-semibold text-slate-600">{status}</p>}
         </form>
+
+        <section className="mt-10">
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.35em] text-slate-500">
+                Existing Stop Photos
+              </p>
+              <p className="text-xs text-slate-400">
+                Delete photos from the selected stop.
+              </p>
+            </div>
+            {isLoadingPhotos && (
+              <p className="text-sm font-semibold text-slate-500">
+                Loading photos...
+              </p>
+            )}
+          </div>
+
+          {photoLoadError ? (
+            <p className="text-sm font-semibold text-red-500">
+              {photoLoadError}
+            </p>
+          ) : stopPhotos.length === 0 ? (
+            <p className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-500">
+              No photos uploaded for this stop yet.
+            </p>
+          ) : (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {stopPhotos.map((photo) => (
+                <div
+                  key={photo.id}
+                  className="overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-lg"
+                >
+                  <img
+                    src={photo.image_url}
+                    alt={photo.caption ?? "Stop photo"}
+                    className="h-56 w-full object-cover"
+                  />
+                  <div className="p-4">
+                    {photo.caption && (
+                      <p className="mb-3 text-sm text-slate-600">
+                        {photo.caption}
+                      </p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleDeletePhoto(photo.id, photo.image_url)}
+                      disabled={deletingPhotoId === photo.id}
+                      className="rounded-full bg-red-500 px-4 py-2 text-sm font-bold text-white shadow transition hover:bg-red-600 disabled:opacity-60"
+                    >
+                      {deletingPhotoId === photo.id ? "Deleting..." : "Delete Photo"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </section>
     </main>
   );

@@ -3,104 +3,96 @@ type RouteProgressProps = {
   totalStops: number;
 };
 
-const routeIconClass =
-  "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm shadow-md transition sm:h-10 sm:w-10 sm:text-lg";
+const iconClass =
+  "flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl shadow-md transition";
 
-const segmentClass = "h-2 min-w-2 w-8 rounded-full transition-colors sm:min-w-3 sm:w-12";
+const lineClass = "h-1.5 flex-1 rounded-full";
 
 export default function RouteProgress({
   currentIndex,
   totalStops,
 }: RouteProgressProps) {
-  const points = Array.from({ length: totalStops }, (_, index) => index);
-  const progressPercent = Math.round(
-    ((currentIndex + 1) / (totalStops + 1)) * 100
-  );
+  const hasPrevious = currentIndex > 0;
+  const hasNext = currentIndex < totalStops - 1;
 
   return (
-    <div className="rounded-[1.5rem] border border-white/70 bg-white/75 p-3 shadow-lg backdrop-blur-md sm:p-4">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-500 sm:text-sm sm:tracking-[0.35em]">
+    <div className="rounded-[1.5rem] border border-white/70 bg-white/80 p-5 shadow-lg backdrop-blur-md">
+      <style>
+        {`
+          @keyframes route-bounce {
+            0%, 100% { transform: translateY(0) scale(1.08); }
+            50% { transform: translateY(-6px) scale(1.12); }
+          }
+
+          @keyframes route-fill {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+          }
+
+          @keyframes route-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.85; }
+          }
+        `}
+      </style>
+
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <p className="text-xs font-black uppercase tracking-[0.28em] text-sky-500 sm:text-sm">
           Route Progress
         </p>
 
-        <p className="text-sm font-bold text-slate-500">
-          Stop {currentIndex + 1} of {totalStops}
+        <p className="text-xs font-bold text-slate-500 sm:text-sm">
+          Stop {currentIndex + 1}
         </p>
       </div>
 
-      <div
-        className="mt-3 h-2 overflow-hidden rounded-full bg-slate-200 sm:hidden"
-        aria-hidden="true"
-      >
+      <div className="grid grid-cols-[auto_1fr_auto_1fr_auto] items-center gap-2">
         <div
-          className="h-full rounded-full bg-gradient-to-r from-orange-400 to-pink-500"
-          style={{ width: `${progressPercent}%` }}
-        />
-      </div>
-
-      <div className="mt-2 overflow-x-auto px-1 py-2 sm:overflow-visible">
-        <div
-          aria-label={`Route is ${progressPercent}% complete`}
-          aria-valuemax={100}
-          aria-valuemin={0}
-          aria-valuenow={progressPercent}
-          className="flex min-w-max items-center gap-0.5 sm:min-w-0 sm:gap-1"
-          role="progressbar"
+          className={`${iconClass} ${
+            hasPrevious ? "bg-orange-400 text-white" : "bg-green-400 text-white"
+          }`}
+          title={hasPrevious ? "Previous stops completed" : "Home"}
         >
+          {hasPrevious ? "📍" : "🏠"}
+        </div>
+
+        <div className={`${lineClass} origin-left overflow-hidden bg-slate-200`}>
           <div
-            aria-label="Home"
-            className={`${routeIconClass} bg-green-400 text-white`}
-            title="Home"
-          >
-            <span aria-hidden="true">🏠</span>
-          </div>
+            className="h-full rounded-full bg-gradient-to-r from-orange-400 to-pink-500"
+            style={{
+              animation: "route-fill 700ms ease-out both",
+            }}
+          />
+        </div>
 
-          {points.map((point, index) => {
-            const isCompleted = index < currentIndex;
-            const isCurrent = index === currentIndex;
-            const isReached = index <= currentIndex;
+        <div
+          className={`${iconClass} h-14 w-14 bg-pink-500 text-2xl text-white`}
+          title={`Stop ${currentIndex + 1}`}
+          style={{
+            animation: "route-bounce 1.8s ease-in-out infinite",
+          }}
+        >
+          🚘
+        </div>
 
-            return (
-              <div key={point} className="contents">
-                <div
-                  className={`${segmentClass} ${
-                    isReached
-                      ? "bg-gradient-to-r from-orange-400 to-pink-500"
-                      : "bg-slate-200"
-                  }`}
-                />
+        <div
+          className={`${lineClass} ${
+            hasNext ? "bg-slate-200" : "bg-gradient-to-r from-pink-500 to-yellow-300"
+          }`}
+        />
 
-                <div
-                  aria-label={`Stop ${index + 1}${
-                    isCurrent ? ", current stop" : ""
-                  }`}
-                  className={`${routeIconClass} ${
-                    isCurrent
-                      ? "scale-110 bg-pink-500 text-white"
-                      : isCompleted
-                      ? "bg-orange-400 text-white"
-                      : "bg-white text-slate-400"
-                  }`}
-                  title={`Stop ${index + 1}`}
-                >
-                  <span aria-hidden="true">
-                    {isCurrent ? "🚘" : "📍"}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-
-          <div className={`${segmentClass} bg-slate-200`} />
-
-          <div
-            aria-label="Final reveal"
-            className={`${routeIconClass} bg-yellow-300 text-slate-900`}
-            title="Final reveal"
-          >
-            <span aria-hidden="true">🎁</span>
-          </div>
+        <div
+          className={`${iconClass} ${
+            hasNext ? "bg-white text-slate-400" : "bg-yellow-300 text-slate-900"
+          }`}
+          title={hasNext ? "Next stop hidden" : "Final reveal"}
+          style={{
+            animation: hasNext
+              ? "route-pulse 1.8s ease-in-out infinite"
+              : "route-pulse 1.8s ease-in-out infinite",
+          }}
+        >
+          {hasNext ? "✨" : "🎁"}
         </div>
       </div>
     </div>
