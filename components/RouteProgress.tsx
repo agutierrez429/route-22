@@ -4,9 +4,9 @@ type RouteProgressProps = {
 };
 
 const routeIconClass =
-  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-base shadow-md transition sm:h-11 sm:w-11 sm:text-xl";
+  "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm shadow-md transition sm:h-10 sm:w-10 sm:text-lg";
 
-const segmentClass = "h-2 min-w-4 flex-1 rounded-full transition-colors";
+const segmentClass = "h-2 min-w-2 w-8 rounded-full transition-colors sm:min-w-3 sm:w-12";
 
 export default function RouteProgress({
   currentIndex,
@@ -39,13 +39,13 @@ export default function RouteProgress({
         />
       </div>
 
-      <div className="mt-2 overflow-x-auto px-1 py-2">
+      <div className="mt-2 overflow-x-auto px-1 py-2 sm:overflow-visible">
         <div
           aria-label={`Route is ${progressPercent}% complete`}
           aria-valuemax={100}
           aria-valuemin={0}
           aria-valuenow={progressPercent}
-          className="flex min-w-[18rem] items-center gap-1 sm:min-w-0 sm:gap-2"
+          className="flex min-w-max items-center gap-0.5 sm:min-w-0 sm:gap-1"
           role="progressbar"
         >
           <div
@@ -53,7 +53,7 @@ export default function RouteProgress({
             className={`${routeIconClass} bg-green-400 text-white`}
             title="Home"
           >
-            <span aria-hidden="true">{"\u{1F3E0}"}</span>
+            <span aria-hidden="true">🏠</span>
           </div>
 
           {points.map((point, index) => {
@@ -85,7 +85,7 @@ export default function RouteProgress({
                   title={`Stop ${index + 1}`}
                 >
                   <span aria-hidden="true">
-                    {isCurrent ? "\u{1F697}" : "\u{1F4CD}"}
+                    {isCurrent ? "🚘" : "📍"}
                   </span>
                 </div>
               </div>
@@ -99,7 +99,7 @@ export default function RouteProgress({
             className={`${routeIconClass} bg-yellow-300 text-slate-900`}
             title="Final reveal"
           >
-            <span aria-hidden="true">{"\u{1F381}"}</span>
+            <span aria-hidden="true">🎁</span>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import Link from "next/link";
 type AdminNavItem = {
   href: string;
   label: string;
-  id: "memory" | "stops" | "photos";
+  id: "memory" | "stops" | "photos" | "final";
 };
 
 type AdminNavProps = {
@@ -13,12 +13,13 @@ type AdminNavProps = {
 const adminNavItems: AdminNavItem[] = [
   { href: "/admin/stops", label: "Add Stop", id: "stops" },
   { href: "/admin/stop-photos", label: "Stop Photos", id: "photos" },
+  { href: "/admin/final-stop", label: "Final Stop", id: "final" },
   { href: "/admin", label: "Scrapbook", id: "memory" },
 ];
 
 export default function AdminNav({ current }: AdminNavProps) {
   return (
-    <nav className="grid gap-2 sm:grid-cols-3" aria-label="Admin tools">
+    <nav className="grid gap-2 sm:grid-cols-4" aria-label="Admin tools">
       {adminNavItems.map((item) => {
         const isActive = item.id === current;
 

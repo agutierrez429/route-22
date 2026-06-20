@@ -1,7 +1,31 @@
 import Link from "next/link";
 import AdaptiveVideo from "@/components/AdaptiveVideo";
+import {
+  FINAL_STOP_CONTENT_ID,
+  mergeFinalStopContent,
+} from "@/lib/finalStop";
+import { supabase } from "@/lib/supabase";
+import type { FinalStopContent } from "@/types";
 
-export default function FinalStopPage() {
+export const dynamic = "force-dynamic";
+
+async function getFinalStopContent() {
+  const { data, error } = await supabase
+    .from("final_stop")
+    .select("id, video_url, intro_text, body_text, hint_text")
+    .eq("id", FINAL_STOP_CONTENT_ID)
+    .maybeSingle();
+
+  if (error) {
+    return mergeFinalStopContent();
+  }
+
+  return mergeFinalStopContent(data as Partial<FinalStopContent> | null);
+}
+
+export default async function FinalStopPage() {
+  const finalStop = await getFinalStopContent();
+
   return (
     <main className="min-h-screen bg-gradient-to-br from-purple-200 via-pink-100 to-orange-100 px-4 py-4 text-slate-900 sm:px-6 sm:py-6">
       <section className="mx-auto max-w-2xl">
@@ -14,23 +38,22 @@ export default function FinalStopPage() {
         </h1>
 
         <p className="mb-6 text-base text-slate-600">
-          There&apos;s one more message before the road continues.
+          {finalStop.intro_text}
         </p>
 
         <AdaptiveVideo
-          src="/videos/final-message.mp4"
+          src={finalStop.video_url}
           frameClassName="mb-6 bg-white"
           className="bg-white"
         />
 
         <div className="rounded-[2rem] border border-white/70 bg-white/80 p-4 shadow-xl backdrop-blur-md sm:p-5">
           <p className="mb-3 text-base text-slate-700">
-            This started as a birthday surprise, but there&apos;s one more part I
-            wanted to give you.
+            {finalStop.body_text}
           </p>
 
           <p className="text-sm text-slate-500">
-            When you&apos;re ready, open the next part of Route 22.
+            {finalStop.hint_text}
           </p>
         </div>
 

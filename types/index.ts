@@ -17,3 +17,11 @@ export type Memory = {
   location: string;
   memory_date: string;
 };
+
+export type FinalStopContent = {
+  id: string;
+  video_url: string;
+  intro_text: string;
+  body_text: string;
+  hint_text: string;
+};
